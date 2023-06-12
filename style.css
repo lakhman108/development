@@ -1,0 +1,51 @@
+*{
+    margin: 0px;
+}
+header {
+    height: 65vh;
+    background-image: url(4.png);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+.horizontallist{
+    margin: 0px;
+    list-style: none;
+    padding-left: 0px;
+    /* word-spacing: 1em; */
+}
+ h1{
+    color: aliceblue;
+    margin-top: 25%;
+    font-size: 4rem;
+}
+.horizontallist li{
+    display: inline-block;
+    padding: 0px 8px 8px 0px;
+   
+}
+.icon li{
+    display: inline-block;
+    padding: 0px 8px 8px 0px;
+   
+}
+.icon li a{
+    font-size: xx-large;
+    color: whitesmoke;
+    text-decoration: none;
+    transition: color 0.5s, border-bottom 4s;
+    
+}
+.horizontallist li a{
+    font-size: xx-large;
+    color: whitesmoke;
+    text-decoration: none;
+    transition: color 0.5s, border-bottom 4s;
+}
+.horizontallist li a:hover{
+    color: aqua;
+   border-bottom: 2px solid aqua;
+}
+.text-center{
+    text-align: center;
+}
