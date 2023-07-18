@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Card Animation</title>
+    <link rel="stylesheet" href="card.css">
+</head>
+<body>
+   <div class="card" id="cardElement">
+       Easy Learn Axis
+   </div>
+
+   <div class="color-selection">
+       <h3>Select Card Colors</h3>
+       <div>
+           <label>
+               <input type="checkbox" name="color" value="#5ddcff" /> Blue
+           </label>
+           <label>
+               <input type="checkbox" name="color" value="#3c67e3" /> Dark Blue
+           </label>
+           <label>
+               <input type="checkbox" name="color" value="#4e00c2" /> Purple
+           </label>
+       </div>
+       <button onclick="applyColorSelection()">Apply Colors</button>
+   </div>
+
+   <script>
+       // Get a reference to the card element
+       const cardElement = document.getElementById("cardElement");
+
+       // Function to apply the selected colors and animation to the card
+       function applyColorSelection() {
+           const checkboxes = document.getElementsByName("color");
+           const selectedColors = [];
+
+           for (let i = 0; i < checkboxes.length; i++) {
+               if (checkboxes[i].checked) {
+                   selectedColors.push(checkboxes[i].value);
+               }
+           }
+
+           // Apply the selected colors to the card
+           cardElement.style.setProperty("--color-1", selectedColors[0] || "");
+           cardElement.style.setProperty("--color-2", selectedColors[1] || "");
+           cardElement.style.setProperty("--color-3", selectedColors[2] || "");
+
+           // Apply the animation keyframes dynamically
+           const dynamicKeyframes = generateKeyframes(selectedColors.length);
+           const styleElement = document.createElement('style');
+           styleElement.textContent = dynamicKeyframes;
+           document.head.appendChild(styleElement);
+       }
+
+       // Function to generate the dynamic animation keyframes
+       function generateKeyframes(colorCount) {
+           let keyframesCSS = `@keyframes spin {`;
+
+           for (let i = 0; i < colorCount; i++) {
+               const percentage = (i / colorCount) * 100;
+               const rotation = (i / colorCount) * 360;
+               const color1 = getComputedStyle(cardElement).getPropertyValue("--color-1");
+               const color2 = getComputedStyle(cardElement).getPropertyValue("--color-2");
+               const color3 = getComputedStyle(cardElement).getPropertyValue("--color-3");
+
+               keyframesCSS += `
+                   ${percentage}% {
+                       --rotate: ${rotation}deg;
+                       background-image: linear-gradient(var(--rotate), ${color1}, ${color2} 43%, ${color3});
+                   }
+               `;
+           }
+
+           keyframesCSS += `}`;
+
+           return keyframesCSS;
+       }
+   </script>
+</body>
+</html>
+
+<style>
+   :root {
+       --card-height: 55vh;
+       --card-width: calc(var(--card-height) / 1.5);
+       --color-1: #5ddcff;
+       --color-2: #3c67e3;
+       --color-3: #4e00c2;
+   }
+
+   body {
+       min-height: 100vh;
+       background: #212534;
+       display: flex;
+       align-items: center;
+       flex-direction: column;
+       padding-top: 2rem;
+       padding-bottom: 2rem;
+       box-sizing: border-box;
+   }
+
+   .card {
+       background: var(--color-1);
+       width: var(--card-width);
+       height: var(--card-height);
+       padding: 3px;
+       position: relative;
+       border-radius: 6px;
+       justify-content: center;
+       align-items: center;
+       text-align: center;
+       display: flex;
+       font-size: 1.5em;
+       color: rgba(88, 199, 250, 0%);
+       cursor: pointer;
+       font-family: cursive;
+   }
+
+   .card:hover {
+       color: rgba(88, 199, 250, 100%);
+       transition: color 1s;
+   }
+
+   .card:hover:before,
+   .card:hover:after {
+       animation: none;
+       opacity: 0;
+   }
+
+   .card::before {
+       content: "";
+       width: 104%;
+       height: 102%;
+       border-radius: 8px;
+       background-image: linear-gradient(var(--rotate), var(--color-1), var(--color-2) 43%, var(--color-3));
+       position: absolute;
+       z-index: -1;
+       top: -1%;
+       left: -2%;
+       animation: spin 2.5s linear infinite;
+   }
+
+   .card::after {
+       position: absolute;
+       content: "";
+       top: calc(var(--card-height) / 6);
+       left: 0;
+       right: 0;
+       z-index: -1;
+       height: 100%;
+       width: 100%;
+       margin: 0 auto;
+       transform: scale(0.8);
+       filter: blur(calc(var(--card-height) / 6));
+       background-image: linear-gradient(var(--rotate), var(--color-1), var(--color-2) 43%, var(--color-3));
+       opacity: 1;
+       transition: opacity 0.5s;
+       animation: spin 2.5s linear infinite;
+   }
+
+   @keyframes spin {
+       0% {
+           --rotate: 0deg;
+       }
+       100% {
+           --rotate: 360deg;
+       }
+   }
+
+   .color-selection {
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       margin-top: 2rem;
+   }
+
+   h3 {
+       font-family: sans-serif;
+       font-size: 1.5rem;
+       font-weight: 600;
+   }
+
+   button {
+       margin-top: 1rem;
+       padding: 0.5rem 1rem;
+       background-color: #5ddcff;
+       color: #fff;
+       border: none;
+       border-radius: 4px;
+       cursor: pointer;
+   }
+</style>

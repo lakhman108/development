@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chess Game</title>
+    
+</head>
+
+<body>
+    <style>#chessboard {
+    display: flex;
+    flex-wrap: wrap;
+    width: 400px;
+    height: 400px;
+}
+
+.square {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 30px;
+}
+
+.white {
+    background-color: #f2f2f2;
+    color: black;
+}
+
+.black {
+    background-color: #999999;
+    color: white;
+}
+</style>
+    <div id="chessboard"></div>
+
+    <script>
+        const chessboard = [
+    ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
+    ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+    ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+];
+
+let selectedPiece = null;
+let currentPlayer = 'white';
+
+function renderChessboard() {
+    const chessboardDiv = document.getElementById('chessboard');
+    chessboardDiv.innerHTML = '';
+
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+            const square = document.createElement('div');
+            square.classList.add('square');
+            square.classList.add((row + col) % 2 === 0 ? 'white' : 'black');
+            square.innerText = chessboard[row][col];
+
+            square.addEventListener('click', () => handleSquareClick(row, col));
+
+            chessboardDiv.appendChild(square);
+        }
+    }
+}
+
+function handleSquareClick(row, col) {
+    const piece = chessboard[row][col];
+
+    if (selectedPiece === null) {
+        // No piece selected yet, select the clicked piece if it belongs to the current player
+        if (piece !== ' ' && piece.charAt(0) === currentPlayer.charAt(0)) {
+            selectedPiece = { row, col };
+            highlightLegalMoves(row, col);
+        }
+    } else {
+        // A piece is already selected, try to make the move
+        const { row: selectedRow, col: selectedCol } = selectedPiece;
+        const isValidMove = isLegalMove(selectedRow, selectedCol, row, col);
+
+        if (isValidMove) {
+            // Move the piece to the target position
+            chessboard[row][col] = chessboard[selectedRow][selectedCol];
+            chessboard[selectedRow][selectedCol] = ' ';
+            selectedPiece = null;
+            currentPlayer = currentPlayer === 'white' ? 'black' : 'white';
+
+            renderChessboard();
+        } else {
+            // Invalid move, deselect the piece
+            selectedPiece = null;
+            renderChessboard();
+        }
+    }
+}
+
+function highlightLegalMoves(row, col) {
+    const piece = chessboard[row][col];
+
+    // Clear previous highlights
+    clearHighlights();
+
+    // Highlight the selected piece
+    const selectedSquare = document.querySelector(`.square[data-row="${row}"][data-col="${col}"]`);
+    selectedSquare.classList.add('selected');
+
+    // Highlight legal moves for the selected piece
+    const legalMoves = getLegalMoves(row, col);
+    for (const move of legalMoves) {
+        const [targetRow, targetCol] = move;
+        const targetSquare = document.querySelector(`.square[data-row="${targetRow}"][data-col="${targetCol}"]`);
+        targetSquare.classList.add('highlight');
+    }
+}
+
+
+function clearHighlights() {
+    const squares = document.getElementsByClassName('square');
+    for (const square of squares) {
+        square.classList.remove('selected', 'highlight');
+    }
+}
+
+function isLegalMove(startRow, startCol, targetRow, targetCol) {
+    const piece = chessboard[startRow][startCol];
+    const targetPiece = chessboard[targetRow][targetCol];
+
+    // Ensure target position is within the chessboard boundaries
+    if (targetRow < 0 || targetRow >= 8 || targetCol < 0 || targetCol >= 8) {
+        return false;
+    }
+
+    // Check if target position is occupied by a piece of the same color
+    if (targetPiece !== ' ' && targetPiece.charAt(0) === piece.charAt(0)) {
+        return false;
+    }
+
+    // Handle move validation based on piece type
+    switch (piece.toLowerCase()) {
+        case 'p':
+            return isPawnMove(startRow, startCol, targetRow, targetCol);
+        case 'r':
+            return isRookMove(startRow, startCol, targetRow, targetCol);
+        case 'n':
+            return isKnightMove(startRow, startCol, targetRow, targetCol);
+        case 'b':
+            return isBishopMove(startRow, startCol, targetRow, targetCol);
+        case 'q':
+            return isQueenMove(startRow, startCol, targetRow, targetCol);
+        case 'k':
+            return isKingMove(startRow, startCol, targetRow, targetCol);
+        default:
+            return false;
+    }
+}
+
+function isPawnMove(startRow, startCol, targetRow, targetCol) {
+    const piece = chessboard[startRow][startCol];
+    const direction = piece.toLowerCase() === 'p' ? 1 : -1;
+
+    // Check if the pawn is moving forward
+    if (targetCol === startCol && targetRow === startRow + direction && chessboard[targetRow][targetCol] === ' ') {
+        return true;
+    }
+
+    // Check if the pawn is capturing diagonally
+    if (Math.abs(targetCol - startCol) === 1 && targetRow === startRow + direction) {
+        const targetPiece = chessboard[targetRow][targetCol];
+        return targetPiece !== ' ' && targetPiece.charAt(0) !== piece.charAt(0);
+    }
+
+    return false;
+}
+
+function isRookMove(startRow, startCol, targetRow, targetCol) {
+    // Check if the move is horizontal or vertical
+    if (startRow === targetRow || startCol === targetCol) {
+        // Check if there are any pieces blocking the path
+        const rowDiff = targetRow - startRow;
+        const colDiff = targetCol - startCol;
+        const step = rowDiff === 0 ? Math.sign(colDiff) : Math.sign(rowDiff);
+
+        let currentRow = startRow + step;
+        let currentCol = startCol + step;
+
+        while (currentRow !== targetRow || currentCol !== targetCol) {
+            if (chessboard[currentRow][currentCol] !== ' ') {
+                return false;
+            }
+
+            currentRow += step;
+            currentCol += step;
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+function isKnightMove(startRow, startCol, targetRow, targetCol) {
+    // Check if the move forms an L-shape (two squares in one direction and one square in the other)
+    const rowDiff = Math.abs(targetRow - startRow);
+    const colDiff = Math.abs(targetCol - startCol);
+    return (rowDiff === 2 && colDiff === 1) || (rowDiff === 1 && colDiff === 2);
+}
+
+function isBishopMove(startRow, startCol, targetRow, targetCol) {
+    // Check if the move is diagonal
+    if (Math.abs(targetRow - startRow) === Math.abs(targetCol - startCol)) {
+        // Check if there are any pieces blocking the path
+        const rowDiff = Math.sign(targetRow - startRow);
+        const colDiff = Math.sign(targetCol - startCol);
+
+        let currentRow = startRow + rowDiff;
+        let currentCol = startCol + colDiff;
+
+        while (currentRow !== targetRow || currentCol !== targetCol) {
+            if (chessboard[currentRow][currentCol] !== ' ') {
+                return false;
+            }
+
+            currentRow += rowDiff;
+            currentCol += colDiff;
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+function isQueenMove(startRow, startCol, targetRow, targetCol) {
+    // Check if the move is horizontal, vertical, or diagonal
+    return isRookMove(startRow, startCol, targetRow, targetCol) || isBishopMove(startRow, startCol, targetRow, targetCol);
+}
+
+function isKingMove(startRow, startCol, targetRow, targetCol) {
+    // Check if the move is within one square in any direction
+    const rowDiff = Math.abs(targetRow - startRow);
+    const colDiff = Math.abs(targetCol - startCol);
+    return rowDiff <= 1 && colDiff <= 1;
+}
+
+// Render the initial chessboard
+renderChessboard();
+
+    </script>
+</body>
+</html>

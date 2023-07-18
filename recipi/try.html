@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Keyframes Example</title>
+    <style>
+        /* Default styles for the box */
+        .box {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 20px;
+            bg: #8085d0;
+            animation: changeborder 5s infinite;
+        }
+
+        /* Default keyframes */
+        @keyframes changeborder {
+            0% {
+                border: solid 5px red;
+            }
+            25% {
+                border: solid 5px yellow;
+            }
+            50% {
+                border: solid 5px green;
+            }
+            75% {
+                border: solid 5px #8085d0;
+            }
+            100% {
+                border: solid 5px violet;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="box"></div>
+
+    <script>
+   
+    </script>
+</body>
+</html>
