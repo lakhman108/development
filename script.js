@@ -5,10 +5,10 @@ const blur = document.getElementById("panel");
 // blur.style.color = "white";
 // blur.style.boxShadow = "0px 5px 5px white";
 
-blur.style.transform = "translateY(-30px)";
+blur.style.transform = "translateY(-2rem)";
 blur.style.transition = "1s ease-in-out";
 blur.style.animation = "filter 2s ease-in-out";
-blur.style.backdropFilter = "blur(5px)";
+blur.style.backdropFilter = "blur(0.3rem)";
 
 const keyframes = `
   @keyframes filter {
@@ -83,7 +83,7 @@ function random_number_generator() {
 
 function makebubules() {
   let str = "";
-  for (let i = 0; i < 200; i++) {
+  for (let i = 0; i < 280; i++) {
     str += `<div id="buble">${Math.floor(Math.random() * 10)}</div>`;
   }
   pbtom.innerHTML = str;
