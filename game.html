@@ -3,92 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Space Bar Game</title>
+    <title>Document</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* Global Styles */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        /* Container Styles */
-        .container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            background-color: #1f242d;
-        }
-
-        /* Instructions Styles */
-        #instructions {
-            padding: 20px;
-            text-align: center;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        #instructions h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        #instructions ul {
-            list-style: none;
-            padding-left: 0;
-            margin-top: 0;
-        }
-
-        #instructions li {
-            margin-bottom: 8px;
-        }
-
-        #instructions p {
-            margin-top: 20px;
-        }
-
-        /* Hover Effect */
-        #instructions:hover {
-            animation: blur 1s forwards;
-        }
-
-        /* Keyframes Animation */
-        @keyframes blur {
-            0% {
-                backdrop-filter: blur(0);
-            }
-            100% {
-                backdrop-filter: blur(10px);
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="container">
-        <div id="instructions">
-            <h2>Instructions</h2>
-            <ul>
-                <li>You need to hit the target from bubbles as many times as possible.</li>
-                <li>You have 60 seconds.</li>
-            </ul>
-            <p>Press the space bar to start and play the game!</p>
+        <div id="panel">
+            <div id="ptop">
+                <div id="elem"><h4>Hit: </h4><div id="hit">0</div></div>
+                <div id="elem"><h4>Time: </h4><div id="timer">60</div></div>
+                <div id="elem"><h4>Score: </h4><div id="score">0</div></div>
+            </div>
+            <div id="pbtom"></div>
         </div>
     </div>
+    
+    
 </body>
-<script>
-    const instructions = document.getElementById("instructions");
-
-    document.addEventListener("keydown", function (event) {
-        if (event.code === "Space" ) {
-            startGame();
-        }
-    });
-
-    function startGame() {
-        window.location.href = "index.html";
-    }
-</script>
 </html>
+<script src="script.js"></script>
