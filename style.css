@@ -52,6 +52,11 @@ html, body {
     font-size: 1.2rem;
     font-weight: 600;
 }
+#hit{
+      height: 2rem;
+    width: 2rem;
+     font-size: 1.8rem;
+}
 #score{
     
     width: 2rem;
@@ -73,14 +78,21 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
+    text-align: center;
+    font-size: 2.1rem;
     font-weight: 500;
     height: 2.6rem;
     width: 2.6rem;
+    border: 0.1rem solid #0f7063;
     border-radius: 50%;
+    
     color: white;
-    background-color: rgb(15 69 44);
+    background-color: rgb(251, 255, 253);
        /* background-color: #0ef(55, 109, 131); */
+}
+#buble:hover{
+    background-color: rgb(15 69 44 / 50%);
+    cursor: pointer;
 }
 @keyframes blur {
     0% { backdrop-filter: blur(0); }
