@@ -58,8 +58,8 @@ function timer() {
       x = 0;
       clearInterval(id);
       alert("Game Over Your Score is " + score1);
-
-      // window.location.href = "score.html";
+      
+       window.location.href = "index.html";
     }
     tim.innerText = x;
     x--;
