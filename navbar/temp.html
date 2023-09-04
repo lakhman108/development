@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body,html{
+        margin: 0px;
+        padding: 0px;
+    }
+    .container{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    gap: 2px;
+}
+.draw{
+    width: 10px;
+    height: 10px;
+    background-color: aquamarine;
+    border-radius: 50%;
+}
+</style>
+
+<body>
+    <div class="container">
+        <div class="draw">
+
+        </div>
+    </div>
+</body>
+<script>
+   
+     function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+const hexCharacters = [0,1,2,3,4,5,6,7,8,9,"A","B","C","D","E","F"]
+
+
+function getCharacter(index) {
+	return hexCharacters[index]
+}
+
+function generateJustOneColor(){
+    
+	let hexColorRep = "#"
+
+    for (let position = 0; position < 6; position++){
+        hexColorRep += getCharacter( position )
+    }
+	
+	return hexColorRep;
+
+}
+
+// console.log(  )
+
+    
+    let str="";
+    let clutter=` <div class="draw"></div>`;
+   
+    for(let i=0;i<100000;i++){
+        str+=clutter;
+    }
+  
+    document.querySelector(".container").innerHTML=str;
+      document.querySelector(".container").addEventListener('mouseover', function(event) {
+        // console.log(event.target.className );
+        if(event.target.className == 'draw')
+    event.target.style.backgroundColor = generateJustOneColor();  // Corrected property name
+    
+});
+
+    
+</script>
+</html>
