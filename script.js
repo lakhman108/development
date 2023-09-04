@@ -52,7 +52,7 @@ let pbtom = document.querySelector("#pbtom");
 
 function timer() {
   let id = setInterval(timing, 1000);
-  let x = 6;
+  let x = 60;
   function timing() {
     if (x <= 0) {
       x = 0;
