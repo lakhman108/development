@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mind Map</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #mindmap {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    svg {
+      overflow: visible;
+    }
+
+    .link {
+      fill: none;
+      stroke: #ccc;
+      stroke-width: 1.5px;
+    }
+
+    .node {
+      font-size: 12px;
+      fill: #333;
+    }
+
+    .node circle {
+      fill: #fff;
+      stroke: steelblue;
+      stroke-width: 1.5px;
+    }
+
+    .node text {
+      text-anchor: middle;
+      dominant-baseline: central;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="mindmap"></div>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script>
+  var data = {
+      "name": "Introduction to Software Engineering",
+      "children": [
+        {
+          "name": "Expectations",
+          "children": [
+            { "name": "Meet user needs" },
+            { "name": "Perform flawlessly over time" },
+            { "name": "Easy to modify" },
+            { "name": "Easy to use" }
+          ]
+        },
+        {
+          "name": "Things Not Expected",
+          "children": [
+            { "name": "User dissatisfaction" },
+            { "name": "Error-prone" },
+            { "name": "Difficult to change" },
+            { "name": "Harder to use" }
+          ]
+        },
+        {
+          "name": "What is Software?",
+          "children": [
+            { "name": "Instructions (programs)" },
+            { "name": "Data structures" },
+            { "name": "Documentation" }
+          ]
+        },
+        {
+          "name": "Software Development",
+          "children": [
+            { "name": "Not manufactured like hardware" },
+            { "name": "Custom-built vs. component-based" }
+          ]
+        },
+        {
+          "name": "Software Characteristics",
+          "children": [
+            { "name": "Doesn’t wear out" },
+            { "name": "Deteriorates over time" }
+          ]
+        },
+        {
+          "name": "Software Application Domains",
+          "children": [
+            { "name": "System software" },
+            { "name": "Application software" },
+            { "name": "Engineering/scientific software" },
+            { "name": "Embedded software" },
+            { "name": "Product-line software" },
+            { "name": "WebApps (Web applications)" },
+            { "name": "AI software" }
+          ]
+        },
+        {
+          "name": "New Software Categories",
+          "children": [
+            { "name": "Open world computing" },
+            { "name": "Ubiquitous computing" },
+            { "name": "Open source" },
+            { "name": "Data mining" },
+            { "name": "Grid computing" },
+            { "name": "Cognitive machines" },
+            { "name": "Software for nanotechnologies" }
+          ]
+        },
+        {
+          "name": "Legacy Software",
+          "children": [
+            { "name": "Reasons for change" },
+            { "name": "Adaptation to new environments" },
+            { "name": "Enhancement for new requirements" },
+            { "name": "Extension for interoperability" },
+            { "name": "Re-architecture for network viability" }
+          ]
+        },
+        {
+          "name": "Software Engineering",
+          "children": [
+            { "name": "Definition" },
+            { "name": "Establishment and use of engineering principles" },
+            { "name": "Economical, reliable, efficient software" },
+            { "name": "Layered Technology" },
+            { "name": "Quality focus" },
+            { "name": "Process layer" },
+            { "name": "Methods (technical how-to’s)" },
+            { "name": "Tools (automated support)" }
+          ]
+        },
+        {
+          "name": "The Software Process",
+          "children": [
+            { "name": "Process Framework" },
+            { "name": "Framework activities" },
+            { "name": "Communication" },
+            { "name": "Planning" },
+            { "name": "Modeling" },
+            { "name": "Construction" },
+            { "name": "Deployment" },
+            { "name": "Umbrella activities" }
+          ]
+        },
+        {
+          "name": "Framework Activities",
+          "children": [
+            { "name": "Communication" },
+            { "name": "Understand domain" },
+            { "name": "Collaborate with stakeholders" },
+            { "name": "Gather requirements" },
+            { "name": "Planning" },
+            { "name": "Create project plan" },
+            { "name": "Define tasks, risks, resources" },
+            { "name": "Specify work products and schedule" },
+            { "name": "Modeling" },
+            { "name": "Create models to understand requirements" },
+            { "name": "Design solutions" },
+            { "name": "Construction" },
+            { "name": "Code generation" },
+            { "name": "Testing to uncover errors" },
+            { "name": "Deployment" },
+            { "name": "Deliver software to customer" },
+            { "name": "Customer evaluation and feedback" }
+          ]
+        },
+        {
+          "name": "Software Project Management",
+          "children": [
+            { "name": "Formal technical reviews" },
+            { "name": "Software quality assurance" },
+            { "name": "Software configuration management" },
+            { "name": "Work product preparation and production" },
+            { "name": "Reusability management" },
+            { "name": "Measurement" },
+            { "name": "Risk management" }
+          ]
+        }
+      ]
+    };
+     
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    var svg = d3.select("#mindmap")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .append("g")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    var tree = d3.tree().size([360, Math.min(width, height) / 2 - 120]);
+
+    var root = d3.hierarchy(data);
+    tree(root);
+
+    var link = svg.selectAll(".link")
+      .data(root.links())
+      .enter().append("path")
+      .attr("class", "link")
+      .attr("d", d3.linkRadial()
+        .angle(function(d) { return d.x; })
+        .radius(function(d) { return d.y; }));
+
+    var node = svg.selectAll(".node")
+      .data(root.descendants())
+      .enter().append("g")
+      .attr("class", "node")
+      .attr("transform", function(d) {
+        return "rotate(" + (d.x - 90) + ")translate(" + d.y + ",0)";
+      });
+
+    node.append("circle")
+      .attr("r", 5)
+      .attr("fill", "#fff")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 1.5);
+
+    node.append("text")
+      .attr("dy", ".31em")
+      .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+      .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
+      .text(function(d) { return d.data.name; });
+  </script>
+</body>
+
+</html>

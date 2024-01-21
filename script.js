@@ -37,7 +37,6 @@ let score = document.querySelector("#score");
 let score1 = 0;
 
 function addscore(thisscore, innernumber) {
-
   if (thisscore == innernumber) {
     score1 += 5;
     score.innerText = score1;
@@ -45,7 +44,6 @@ function addscore(thisscore, innernumber) {
     makebubules();
   }
 }
-
 
 let tim = document.querySelector("#timer");
 let pbtom = document.querySelector("#pbtom");
@@ -56,10 +54,12 @@ function timer() {
   function timing() {
     if (x <= 0) {
       x = 0;
+       localStorage.setItem("score", score1);
       clearInterval(id);
-      alert("Game Over Your Score is " + score1);
-      
-       window.location.href = "index.html";
+    
+      // alert("Game Over Your Score is " + score1);
+
+      window.location.href = "yourscore.html";
     }
     tim.innerText = x;
     x--;
@@ -71,23 +71,64 @@ let hit = document.querySelector("#hit");
 
 function random_number_generator() {
   hit.innerText = emojis[Math.floor(Math.random() * 10)];
-  console.log(hit.innerText);
+  
 }
 
+function random_color_generator() {
+  let color = Math.floor(Math.random() * 16777215).toString(16);
+  color = "#" + color;
+  return color;
+}
+
+
 function makebubules() {
+
+
   let str = "";
-  for (let i = 0; i < 280; i++) {
+  for (let i = 0; i < 500; i++) {
+
+
     let random_index_generator = Math.floor(Math.random() * 10);
     str += `<div id="buble">${emojis[random_index_generator]}</div>`;
   }
+
   pbtom.innerHTML = str;
+ 
+
 }
 
 pbtom.addEventListener("click", function (e) {
+
   if (e.target.id === "buble") {
     addscore(e.target.innerText, hit.innerText, e.target);
   }
+
+  
 });
+
+let isColorOn = false;
+
+setInterval(function color_changer() {
+  let allbubules = document.querySelectorAll("#buble");
+  let hitText = hit.innerText;
+
+  for (let i = 0; i < 30; i++) {
+    if (allbubules[i].innerText === hitText) {
+      setTimeout(function () {
+        if (isColorOn) {
+          allbubules[i].style.backgroundColor = random_color_generator();
+        } else {
+          allbubules[i].style.backgroundColor = ""; // Turn off the background color
+        }
+        // allbubules[i].style.transition = "1s ease-in-out";
+      }, i * 100); // Adjust the time delay as needed
+    }
+  }
+
+  // Toggle the state for the next iteration
+  isColorOn = !isColorOn;
+}, 500);
+
 
 random_number_generator();
 makebubules();
