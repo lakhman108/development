@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>દાન કાર્ડ</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1a202c;
+      font-family: 'Poppins', sans-serif;
+    }
+    .card {
+      max-width: 400px;
+      margin: 0 auto;
+      border: none;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .card-img-top {
+      height: 400px;
+      width: 100%;
+      object-fit: cover;
+    }
+    .card-body {
+      padding: 30px;
+      background-color: #2d3748;
+    }
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: #cbd5e0;
+      margin-bottom: 20px;
+    }
+    .card-text {
+      font-size: 16px;
+      color: #e2e8f0;
+      margin-bottom: 10px;
+    }
+    .donor-info {
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+  <div class="card my-5 bg-gray-800 text-gray-300">
+    <img src="IMG_0682.heic" class="card-img-top" alt="મંદિર છબી">
+    <div class="card-body">
+      <h5 class="card-title text-center">તમારા દાન માટે આભાર</h5>
+      <p class="card-text text-center">અમે આપની સાથે વચ્ચરા દાદા મંદિરની સાથે આપનું ઉદારતાનું સમર્થન આભારી છીએ.</p>
+      <p class="card-text text-center donor-info">દાતા: <span id="donor-name">પરમાર હોથી</span></p>
+      <p class="card-text text-center donor-info">રકમ: <span id="donation-amount">₹5000</span></p>
+    </div>
+  </div>
+
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <script>
+    const donorName = document.getElementById('donor-name');
+    const donationAmount = document.getElementById('donation-amount');
+
+    function updateCard(name, amount) {
+      donorName.textContent = name;
+      donationAmount.textContent = `₹${amount}`;
+    }
+
+    updateCard('પરમાર હોથી', 5000);
+
+    function captureCardImage() {
+      const card = document.querySelector('.card');
+      html2canvas(card).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.download = 'donation-card.png';
+        link.href = imgData;
+        link.click();
+      });
+    }
+
+    document.querySelector('.card').addEventListener('click', captureCardImage);
+  </script>
+</body>
+</html>

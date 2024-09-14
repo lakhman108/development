@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starting Animation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .intro {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            color: #fff;
+            z-index: 9999;
+            flex-direction: column;
+        }
+
+        .intro-text {
+            opacity: 0;
+        }
+
+        .fade-in-out {
+            animation: fadeInOut 2s ease-in-out forwards;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="intro">
+       
+        <h1 class="intro-text">Eat</h1>
+        <h1 class="intro-text">Sleep</h1>
+        <h1 class="intro-text">Code</h1>
+        <h1 class="intro-text">Repeat</h1>
+    </div>
+    <main>
+        <!-- Rest of your website content goes here -->
+    </main>
+
+    <script>
+        const texts = Array.from(document.querySelectorAll('.intro-text'));
+        let index = 0;
+
+        function animateText() {
+            texts[index].classList.add('fade-in-out');
+            texts[index].addEventListener('animationend', () => {
+                texts[index].classList.remove('fade-in-out');
+                index = (index + 1) % texts.length;
+                animateText();
+            }, { once: true });
+        }
+
+        window.addEventListener('load', animateText);
+    </script>
+</body>
+</html>
